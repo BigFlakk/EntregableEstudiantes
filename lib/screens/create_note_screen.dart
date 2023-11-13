@@ -16,7 +16,8 @@ class CreateNoteScreen extends StatelessWidget {
 class _CreateForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final NotesProvider notesProvider = Provider.of<NotesProvider>(context);
+    final TblStudentProvider notesProvider =
+        Provider.of<TblStudentProvider>(context);
     final ActualOptionProvider actualOptionProvider =
         Provider.of<ActualOptionProvider>(context, listen: false);
     return Form(
@@ -27,33 +28,56 @@ class _CreateForm extends StatelessWidget {
           TextFormField(
             autocorrect: false,
             keyboardType: TextInputType.emailAddress,
-            initialValue: notesProvider.title,
+            initialValue: notesProvider.id.toString(),
             decoration: const InputDecoration(
-                hintText: 'Construir Apps',
-                labelText: 'Titulo',
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 8, horizontal: 8)),
-            onChanged: (value) => notesProvider.title = value,
+              hintText: 'Ej:199928461',
+              labelText: 'Documento de Estudiante',
+              contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+            ),
+            onChanged: (value) {
+              // Intenta convertir 'value' a int
+              int? parsedValue = int.tryParse(value);
+
+              // Asigna el valor convertido a 'notesProvider.id'
+              if (parsedValue != null) {
+                notesProvider.id = parsedValue;
+              }
+            },
             validator: (value) {
               return value != '' ? null : 'El campo no debe estar vacío';
             },
           ),
-          const SizedBox(height: 30),
           TextFormField(
-            maxLines: 10,
             autocorrect: false,
-            initialValue: notesProvider.description,
+            keyboardType: TextInputType.emailAddress,
+            initialValue: notesProvider.nombre,
+            decoration: const InputDecoration(
+                hintText: 'Ej: Sebastian Escobar',
+                labelText: 'Nombre Completo',
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 8, horizontal: 8)),
+            onChanged: (value) => notesProvider.nombre = value,
+            validator: (value) {
+              return value != '' ? null : 'El campo no debe estar vacío';
+            },
+          ),
+          const SizedBox(height: 10),
+          TextFormField(
+            maxLines: 6,
+            autocorrect: false,
+            initialValue: notesProvider.edad,
             // keyboardType: TextInputType.emailAddress,
             decoration: const InputDecoration(
-              hintText: 'Aprender sobre Dart...',
-              labelText: 'Descripción',
+              hintText: '0-100',
+              labelText: 'Edad',
             ),
-            onChanged: (value) => notesProvider.description = value,
+
+            onChanged: (value) => notesProvider.edad = value,
             validator: (value) {
               return (value != null) ? null : 'El campo no puede estar vacío';
             },
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 10),
           MaterialButton(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -82,7 +106,8 @@ class _CreateForm extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                 child: Text(
                   notesProvider.isLoading ? 'Espere' : 'Ingresar',
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255)),
                 )),
           )
         ],

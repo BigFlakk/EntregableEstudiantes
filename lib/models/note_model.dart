@@ -10,24 +10,24 @@ String noteToJson(Note data) => json.encode(data.toJson());
 
 class Note {
   int? id;
-  String title;
-  String description;
+  String nombre;
+  String edad;
 
   Note({
-    this.id,
-    required this.title,
-    required this.description,
+    required this.id,
+    required this.nombre,
+    required this.edad,
   });
 
   factory Note.fromJson(Map<String, dynamic> json) => Note(
         id: json["id"],
-        title: json["title"],
-        description: json["description"],
+        nombre: json["nombre"],
+        edad: json["edad"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "title": title,
-        "description": description,
+        "nombre": nombre,
+        "edad": edad,
       };
 }

@@ -1,6 +1,9 @@
+// ignore_for_file: unused_import, must_be_immutable, prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 import 'package:notes_crud_local_app/providers/notes_provider.dart';
 import 'package:notes_crud_local_app/screens/create_note_screen.dart';
+import 'package:notes_crud_local_app/screens/details_screen.dart';
 import 'package:notes_crud_local_app/screens/list_notes_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +17,8 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Center(child: Text("Home Notas")),
+          title: const Center(child: Text("Lista de Estudiantes")),
+          backgroundColor: Colors.deepPurpleAccent,
         ),
         body: _HomeScreenBody(),
         bottomNavigationBar: const CustomNavigatorBar());
@@ -22,6 +26,12 @@ class HomeScreen extends StatelessWidget {
 }
 
 class _HomeScreenBody extends StatelessWidget {
+  var id;
+
+  var edad;
+
+  get nombre => null;
+
   @override
   Widget build(BuildContext context) {
     final ActualOptionProvider actualOptionProvider =
@@ -34,6 +44,9 @@ class _HomeScreenBody extends StatelessWidget {
         return const ListNotesScreen();
       case 1:
         return const CreateNoteScreen();
+      case 2:
+        return DetailsScreen(
+            student: Student(id: id, nombre: nombre, edad: edad));
       default:
         return const ListNotesScreen();
     }

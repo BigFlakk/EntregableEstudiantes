@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages, avoid_print, unnecessary_nullable_for_final_variable_declarations
+
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
@@ -26,7 +28,7 @@ class DBProvider {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
 
     //Armamos la url donde quedará la base de datos
-    final path = join(documentsDirectory.path, 'NotesDB.db');
+    final path = join(documentsDirectory.path, 'TblStudentDB.db');
 
     //Imprimos ruta
     print(path);
@@ -38,10 +40,10 @@ class DBProvider {
       onCreate: (db, version) async {
         await db.execute('''
 
-        CREATE TABLE notes(
+        CREATE TABLE tblStudent(
           id INTEGER PRIMARY KEY,
-          title TEXT,
-          description TEXT
+          nombre TEXT,
+          edad TEXT
         )
 
 ''');
@@ -51,15 +53,15 @@ class DBProvider {
 
   Future<int> newNoteRaw(Note note) async {
     final int? id = note.id;
-    final String title = note.title;
-    final String description = note.description;
+    final String nombre = note.nombre;
+    final String edad = note.edad;
 
     final db =
         await database; //Recibimos instancia de base de datos para trabajar con ella
 
     final int res = await db.rawInsert('''
 
-      INSERT INTO notes (id, title, description) VALUES ($id, "$title", "$description")
+      INSERT INTO tblStudent (id, nombre, edad) VALUES ($id, "$nombre", "$edad")
 
 ''');
     print(res);
@@ -69,7 +71,7 @@ class DBProvider {
   Future<int> newNote(Note note) async {
     final db = await database;
 
-    final int res = await db.insert("notes", note.toJson());
+    final int res = await db.insert("tblStudent", note.toJson());
 
     return res;
   }
@@ -79,15 +81,15 @@ class DBProvider {
     final Database db = await database;
 
     //usando Query para construir la consulta, con where y argumentos posicionales (whereArgs)
-    final res = await db.query('notes', where: 'id = ?', whereArgs: [id]);
+    final res = await db.query('tblStudent', where: 'id = ?', whereArgs: [id]);
     print(res);
     //Preguntamos si trae algun dato. Si lo hace
     return res.isNotEmpty ? Note.fromJson(res.first) : null;
   }
 
-  Future<List<Note>> getAllNotes() async {
+  Future<List<Note>> getAllTblStudent() async {
     final Database? db = await database;
-    final res = await db!.query('notes');
+    final res = await db!.query('tblstudent');
     //Transformamos con la funcion map instancias de nuestro modelo. Si no existen registros, devolvemos una lista vacia
     return res.isNotEmpty ? res.map((n) => Note.fromJson(n)).toList() : [];
   }
@@ -95,21 +97,22 @@ class DBProvider {
   Future<int> updateNote(Note note) async {
     final Database db = await database;
     //con updates, se usa el nombre de la tabla, seguido de los valores en formato de Mapa, seguido del where con parametros posicionales y los argumentos finales
-    final res = await db
-        .update('notes', note.toJson(), where: 'id = ?', whereArgs: [note.id]);
+    final res = await db.update('tblstudent', note.toJson(),
+        where: 'id = ?', whereArgs: [note.id]);
     return res;
   }
 
   Future<int> deleteNote(int id) async {
     final Database db = await database;
-    final int res = await db.delete('notes', where: 'id = ?', whereArgs: [id]);
+    final int res =
+        await db.delete('tblstudent', where: 'id = ?', whereArgs: [id]);
     return res;
   }
 
-  Future<int> deleteAllNotes() async {
+  Future<int> deleteAllTblStudent() async {
     final Database db = await database;
     final res = await db.rawDelete('''
-      DELETE FROM notes    
+      DELETE FROM tblstudent    
     ''');
     return res;
   }

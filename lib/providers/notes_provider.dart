@@ -1,19 +1,22 @@
+// ignore_for_file: avoid_print, unused_local_variable
+
 import 'package:flutter/material.dart';
 
 import '../models/note_model.dart';
 import 'db_provider.dart';
 
-class NotesProvider extends ChangeNotifier {
+class TblStudentProvider extends ChangeNotifier {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   String createOrUpdate = 'create';
-  int? id;
-  String title = '';
-  String description = '';
+  int id = 0;
+  String nombre = '';
+  String edad = '';
 
   bool _isLoading = false;
-  List<Note> notes = [];
+  List<Note> tblstudent = [];
 
+  // ignore: unnecessary_getters_setters
   bool get isLoading => _isLoading;
 
   set isLoading(bool opc) {
@@ -27,46 +30,48 @@ class NotesProvider extends ChangeNotifier {
   }
 
   addNote() async {
-    final Note note = Note(title: title, description: description);
+    final Note note = Note(
+      id: id.toInt(),
+      nombre: nombre,
+      edad: edad,
+    );
 
-    final id = await DBProvider.db.newNote(note);
+    final res = await DBProvider.db.newNote(note);
 
-    note.id = id;
-
-    notes.add(note);
+    tblstudent.add(note);
 
     notifyListeners();
   }
 
-  loadNotes() async {
-    final List<Note> notes = await DBProvider.db.getAllNotes();
+  loadTblStudent() async {
+    final List<Note> tblstudent = await DBProvider.db.getAllTblStudent();
     //operador Spreed
-    this.notes = [...notes];
+    this.tblstudent = [...tblstudent];
     notifyListeners();
   }
 
   updateNote() async {
-    final note = Note(id: id, title: title, description: description);
+    final note = Note(id: id, nombre: nombre, edad: edad);
     final res = await DBProvider.db.updateNote(note);
     print("Id actualizado: $res");
-    loadNotes();
+    loadTblStudent();
   }
 
   deleteNoteById(int id) async {
     final res = await DBProvider.db.deleteNote(id);
-    loadNotes();
+    loadTblStudent();
   }
 
   assignDataWithNote(Note note) {
-    id = note.id;
-    title = note.title;
-    description = note.description;
+    id = note.id!;
+    nombre = note.nombre;
+    edad = note.edad;
   }
 
   resetNoteData() {
-    id = null;
-    title = '';
-    description = '';
+    id = 0;
+    nombre = '';
+    edad = '';
     createOrUpdate = 'create';
   }
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
 import 'package:notes_crud_local_app/providers/actual_option_provider.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +17,7 @@ class ListNotesScreen extends StatelessWidget {
 
 class _ListNotes extends StatelessWidget {
   void displayDialog(
-      BuildContext context, NotesProvider notesProvider, int id) {
+      BuildContext context, TblStudentProvider notesProvider, int id) {
     showDialog(
         barrierDismissible: false,
         context: context,
@@ -49,15 +51,15 @@ class _ListNotes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    NotesProvider notesProvider = Provider.of<NotesProvider>(context);
+    TblStudentProvider notesProvider = Provider.of<TblStudentProvider>(context);
 
-    final notes = notesProvider.notes;
+    final notes = notesProvider.tblstudent;
 
     return ListView.builder(
       itemCount: notes.length,
       itemBuilder: (_, index) => ListTile(
         leading: const Icon(Icons.note),
-        title: Text(notes[index].title),
+        title: Text(notes[index].nombre),
         subtitle: Text(notes[index].id.toString()),
         trailing: PopupMenuButton(
           // icon: Icon(Icons.fire_extinguisher),
